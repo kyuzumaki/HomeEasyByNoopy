@@ -1,5 +1,5 @@
 # ESP8266 hacked-HomeEasyByNoopy
-This is a version of noopys code with bits (the hardware timer calls) commented out to allow compilation on an ESP8266. Note doing this means you can not use the recieve function only send works. You will need an arduino to sniff the correct codes for your devices.
+This is a version of noopys code with bits (the hardware timer calls) commented out to allow compilation on an ESP8266. Note doing this means you can not use the receive function only the send works. You will need an arduino to sniff the correct codes for your devices.
 
 Manage your lights and rolling shutters with Arduino !
 
