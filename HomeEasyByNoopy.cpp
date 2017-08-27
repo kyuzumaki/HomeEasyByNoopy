@@ -3,7 +3,7 @@
 extern "C" {
   // AVR LibC Includes
   #include <inttypes.h>
-  #include <avr/interrupt.h>
+  //#include <avr/interrupt.h>
   #include "Arduino.h"
 }
 
@@ -43,11 +43,11 @@ void HomeEasyByNoopy::setReceiver(HomeEasyByNoopyReceiver receiverHandler) {
 unsigned int HomeEasyByNoopy::getTimer() {
   unsigned char sreg;
   unsigned int value;
-  sreg = SREG;
+  sreg = 0;//SREG;
   cli();
-  value = TCNT1; // read the timer
-  TCNT1 = 0x00;  // reset the timer
-  SREG = sreg;
+  value = 0;//TCNT1; // read the timer
+  //TCNT1 = 0x00;  // reset the timer
+  //SREG = sreg;
   return value;
 }
 
@@ -70,17 +70,16 @@ void HomeEasyByNoopy::EnableRead(unsigned char onOffState) {
     receive_flags[1] = 0;
     
     // Configure Timer
-    TCCR1A = 0x00;
-    TCCR1B = 0x03; // prescale to 64
-    TCCR1C = 0x00;
-    
+    //TCCR1A = 0x00;
+    //TCCR1B = 0x03; // prescale to 64
+    //TCCR1C = 0x00;
     // Save interrupt state
-	receive_sreg = SREG;
+	//receive_sreg = SREG;
     attachInterrupt(digitalPinToInterrupt(receive_pin), HomeEasyByNoopy::process, CHANGE);
   } else {
     detachInterrupt(digitalPinToInterrupt(receive_pin));
     // Restaure interrupt state
-    SREG = receive_sreg;
+    //SREG = receive_sreg;
   }
 }
 
@@ -103,7 +102,7 @@ void HomeEasyByNoopy::process() {
 	  receive_commandCursor = 0;
 	  return;
   }
-  sreg = SREG;
+  //sreg = SREG;
   cli(); // Stops interrupts
   receive_flags[1] = digitalRead(receive_pin);
   if (receive_flags[0] != receive_flags[1]) {
@@ -149,7 +148,7 @@ void HomeEasyByNoopy::process() {
     }
   }
   receive_flags[0] = receive_flags[1];
-  SREG = sreg; // enable interupts
+  //SREG = sreg; // enable interupts
 }
 
 void HomeEasyByNoopy::setListenPin(int pin) {
@@ -209,7 +208,7 @@ void HomeEasyByNoopy::buildFrame(int* frame, unsigned long controller, unsigned 
 
 void HomeEasyByNoopy::sendFrame(int* frame, int count) {
   unsigned char sreg;
-  sreg = SREG;
+  //sreg = SREG;
   cli(); // disable interupts
   receive_disabled = 1; // Stop listening
   
@@ -225,7 +224,7 @@ void HomeEasyByNoopy::sendFrame(int* frame, int count) {
   }
   startEndFrame();
   receive_disabled = 0; // Restore listening
-  SREG = sreg; // enable interupts
+  //SREG = sreg; // enable interupts
 }
 
 void HomeEasyByNoopy::emit (unsigned long controller, unsigned char device, bool onOff) {
